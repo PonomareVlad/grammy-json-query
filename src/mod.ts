@@ -45,7 +45,7 @@ export class InlineKeyboardWithJSON extends InlineKeyboard {
         const byteLength = new TextEncoder().encode(encoded).byteLength;
         if (byteLength > 64) {
             throw new Error(
-                `Callback data exceeds 64 bytes: ${byteLength}`,
+                `Callback data exceeds 64 bytes: ${byteLength} (${encoded})`,
             );
         }
         return InlineKeyboard.text(text, encoded);
