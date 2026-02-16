@@ -77,4 +77,3 @@ You can also use the static `.json()` method to create a keyboard in one step:
 ```typescript
 const keyboard = InlineKeyboardWithJSON.json("Click me", { id: 42 });
 ```
-
