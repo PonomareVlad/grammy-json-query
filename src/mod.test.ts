@@ -11,7 +11,11 @@ type TestContext = Context & JsonQueryFlavor;
 /** Creates a Context for testing, casting through `any` to bypass strict Update types. */
 // deno-lint-ignore no-explicit-any
 function createCtx(update: any): TestContext {
-    return new Context(update, new Api(""), {} as UserFromGetMe) as TestContext;
+    return new Context(
+        update,
+        new Api("test-token"),
+        {} as UserFromGetMe,
+    ) as TestContext;
 }
 
 // --- InlineKeyboardWithJSON tests ---

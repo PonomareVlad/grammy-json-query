@@ -81,15 +81,18 @@ export function jsonQuery(): Composer<JsonQueryContext> {
     const composer = new Composer<JsonQueryContext>();
 
     composer.use((ctx, next) => {
+        let cached: { value: unknown } | undefined;
         Object.defineProperty(ctx, "jsonQuery", {
             get() {
+                if (cached) return cached.value;
                 const data = ctx.match ?? ctx.callbackQuery?.data;
                 if (typeof data !== "string") return undefined;
                 try {
-                    return JSON.parse(data);
+                    cached = { value: JSON.parse(data) };
                 } catch {
-                    return undefined;
+                    cached = { value: undefined };
                 }
+                return cached.value;
             },
             configurable: true,
             enumerable: true,
