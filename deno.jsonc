@@ -1,5 +1,5 @@
 {
-    "lock": false,
+    "lock": true,
     "imports": {
         "@std/assert": "jsr:@std/assert@1"
     },

@@ -8,7 +8,7 @@ export type JsonQueryFlavor = {
      * Parsed JSON from callback query data (`ctx.callbackQuery.data`).
      * Returns `undefined` if the data is not valid JSON.
      */
-    jsonQuery: unknown | undefined;
+    readonly jsonQuery: unknown | undefined;
 };
 
 type JsonQueryContext = Context & JsonQueryFlavor;
@@ -42,7 +42,13 @@ export class InlineKeyboardWithJSON extends InlineKeyboard {
      * @param data Data to be JSON-encoded as callback data
      */
     json(text: string, data: unknown = {}) {
-        return this.text(text, JSON.stringify(data));
+        const encoded = JSON.stringify(data);
+        if (encoded.length > 64) {
+            throw new Error(
+                `Callback data exceeds 64 bytes: ${encoded.length}`,
+            );
+        }
+        return this.text(text, encoded);
     }
 }
 
