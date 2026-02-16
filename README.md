@@ -17,7 +17,7 @@ data, and provides middleware to automatically parse callback query data as JSON
 ### Node.js
 
 ```bash
-npm install github:PonomareVlad/grammy-json-query
+npm install grammy-json-query
 ```
 
 ### Deno
@@ -27,7 +27,7 @@ import {
     InlineKeyboardWithJSON,
     jsonQuery,
     type JsonQueryFlavor,
-} from "https://raw.githubusercontent.com/PonomareVlad/grammy-json-query/main/src/mod.ts";
+} from "npm:grammy-json-query";
 ```
 
 ## Usage
