@@ -5,7 +5,7 @@ import { Composer, Context, InlineKeyboard } from "./deps.deno.ts";
  */
 export type JsonQueryFlavor = {
     /**
-     * Parsed JSON from callback query data (`ctx.match` or `ctx.callbackQuery.data`).
+     * Parsed JSON from callback query data (`ctx.callbackQuery.data`).
      * Returns `undefined` if the data is not valid JSON.
      */
     jsonQuery: unknown | undefined;
@@ -47,11 +47,11 @@ export class InlineKeyboardWithJSON extends InlineKeyboard {
 }
 
 /**
- * Creates middleware that parses `ctx.match` as JSON and exposes the
- * result via `ctx.jsonQuery`.
+ * Creates middleware that parses callback query data as JSON and
+ * exposes the result via `ctx.jsonQuery`.
  *
  * Install it on your bot to automatically parse callback query data
- * as JSON in any handler that uses `ctx.match`.
+ * as JSON.
  *
  * @returns A composer with the JSON query middleware installed
  *
@@ -85,7 +85,7 @@ export function jsonQuery(): Composer<JsonQueryContext> {
         Object.defineProperty(ctx, "jsonQuery", {
             get() {
                 if (cached) return cached.value;
-                const data = ctx.match ?? ctx.callbackQuery?.data;
+                const data = ctx.callbackQuery?.data;
                 if (typeof data !== "string") return undefined;
                 try {
                     cached = { value: JSON.parse(data) };
