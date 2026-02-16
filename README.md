@@ -1,13 +1,79 @@
-# The Hitchhiker's Guide to grammY Plugins
+# JSON Callback Query Plugin for grammY
 
-grammY is very extensible and it supports installing plugins. This repository is a template for developing such plugins.
+A [grammY](https://grammy.dev/) plugin that extends `InlineKeyboard` with a
+convenient `.json()` method for creating buttons with JSON-encoded callback
+data, and provides middleware to automatically parse callback query data as JSON.
 
-⚠️ **For instructions on how to use this template please visit the [official docs](https://grammy.dev/plugins/guide.html).**
+## Features
 
-# Rules of Contribution
+- **InlineKeyboardWithJSON** — extends grammY's `InlineKeyboard` with a `.json()` method
+  that encodes callback data as JSON.
+- **jsonQuery middleware** — hydrates `ctx.jsonQuery` with the parsed JSON from
+  callback query data.
+- **JsonQueryFlavor** — TypeScript context flavor for type-safe access to `ctx.jsonQuery`.
 
-Before diving into some hands-on examples, there are some notes to pay attention to if you would like your plugins to be submitted to the documentation:
+## Installation
 
-1. You should document your plugin (README with instructions).
-2. Explain the purpose of your plugin and how to use it by adding a page to the [docs](https://github.com/grammyjs/website).
-3. Choose a permissive license such as MIT or ISC.
+### Node.js
+
+```bash
+npm install github:PonomareVlad/grammy-json-query
+```
+
+### Deno
+
+```typescript
+import {
+    InlineKeyboardWithJSON,
+    jsonQuery,
+    type JsonQueryFlavor,
+} from "https://raw.githubusercontent.com/PonomareVlad/grammy-json-query/main/src/mod.ts";
+```
+
+## Usage
+
+```typescript
+import { Bot, Context } from "grammy";
+import {
+    InlineKeyboardWithJSON,
+    jsonQuery,
+    type JsonQueryFlavor,
+} from "grammy-json-query";
+
+type MyContext = Context & JsonQueryFlavor;
+
+const bot = new Bot<MyContext>("<your-bot-token>");
+
+// Install the JSON query middleware
+bot.use(jsonQuery());
+
+// Send an inline keyboard with JSON-encoded buttons
+bot.command("start", async (ctx) => {
+    const keyboard = new InlineKeyboardWithJSON()
+        .json("Like 👍", { action: "vote", value: "like" })
+        .json("Dislike 👎", { action: "vote", value: "dislike" });
+
+    await ctx.reply("Rate this bot:", { reply_markup: keyboard });
+});
+
+// Handle callback queries with parsed JSON data
+bot.on("callback_query:data", async (ctx) => {
+    const data = ctx.jsonQuery as { action: string; value: string };
+
+    if (data?.action === "vote") {
+        await ctx.answerCallbackQuery({
+            text: `You voted: ${data.value}`,
+        });
+    }
+});
+
+bot.start();
+```
+
+### Static Method
+
+You can also use the static `.json()` method to create a keyboard in one step:
+
+```typescript
+const keyboard = InlineKeyboardWithJSON.json("Click me", { id: 42 });
+```
