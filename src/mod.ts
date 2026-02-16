@@ -1,4 +1,4 @@
-import { Composer, Context, InlineKeyboard } from "./deps.deno.ts";
+import { BaseInlineKeyboard, Composer, Context } from "./deps.deno.ts";
 import type { InlineKeyboardButton } from "./deps.deno.ts";
 
 /**
@@ -20,12 +20,12 @@ type JsonQueryContext = Context & JsonQueryFlavor;
  *
  * @example
  * ```typescript
- * const keyboard = new InlineKeyboardWithJSON()
+ * const keyboard = new InlineKeyboard()
  *     .json("Like", { action: "like", id: 42 })
  *     .json("Dislike", { action: "dislike", id: 42 });
  * ```
  */
-export class InlineKeyboardWithJSON extends InlineKeyboard {
+export class InlineKeyboard extends BaseInlineKeyboard {
     /**
      * Creates a new JSON-encoded callback button object.
      *
@@ -48,7 +48,7 @@ export class InlineKeyboardWithJSON extends InlineKeyboard {
                 `Callback data exceeds 64 bytes: ${byteLength} (${encoded})`,
             );
         }
-        return InlineKeyboard.text(text, encoded);
+        return BaseInlineKeyboard.text(text, encoded);
     }
 
     /**
@@ -58,10 +58,9 @@ export class InlineKeyboardWithJSON extends InlineKeyboard {
      * @param data Data to be JSON-encoded as callback data
      */
     json(text: string, data: unknown = {}) {
-        return this.add(InlineKeyboardWithJSON.json(text, data));
+        return this.add(InlineKeyboard.json(text, data));
     }
 }
-
 /**
  * Creates middleware that parses callback query data as JSON and
  * exposes the result via `ctx.jsonQuery`.
@@ -75,7 +74,7 @@ export class InlineKeyboardWithJSON extends InlineKeyboard {
  * ```typescript
  * import { Bot, Context } from "grammy";
  * import {
- *     InlineKeyboardWithJSON,
+ *     InlineKeyboard,
  *     jsonQuery,
  *     type JsonQueryFlavor,
  * } from "grammy-json-query";
