@@ -1,6 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { Api, Context, type UserFromGetMe } from "./deps.deno.ts";
 import {
+    InlineKeyboard,
     InlineKeyboardWithJSON,
     jsonQuery,
     type JsonQueryFlavor,
@@ -18,10 +19,10 @@ function createCtx(update: any): TestContext {
     ) as TestContext;
 }
 
-// --- InlineKeyboardWithJSON tests ---
+// --- InlineKeyboard tests ---
 
-Deno.test("InlineKeyboardWithJSON.json() adds a JSON-encoded button", () => {
-    const kb = new InlineKeyboardWithJSON().json("Click", {
+Deno.test("InlineKeyboard.json() adds a JSON-encoded button", () => {
+    const kb = new InlineKeyboard().json("Click", {
         action: "test",
         id: 1,
     });
@@ -34,17 +35,17 @@ Deno.test("InlineKeyboardWithJSON.json() adds a JSON-encoded button", () => {
 });
 
 Deno.test(
-    "InlineKeyboardWithJSON.json() uses empty object by default",
+    "InlineKeyboard.json() uses empty object by default",
     () => {
-        const kb = new InlineKeyboardWithJSON().json("Click");
+        const kb = new InlineKeyboard().json("Click");
         // deno-lint-ignore no-explicit-any
         const rows = (kb as any).inline_keyboard;
         assertEquals(rows[0][0].callback_data, "{}");
     },
 );
 
-Deno.test("InlineKeyboardWithJSON.json() is chainable", () => {
-    const kb = new InlineKeyboardWithJSON()
+Deno.test("InlineKeyboard.json() is chainable", () => {
+    const kb = new InlineKeyboard()
         .json("A", { a: 1 })
         .json("B", { b: 2 });
     // deno-lint-ignore no-explicit-any
@@ -54,10 +55,14 @@ Deno.test("InlineKeyboardWithJSON.json() is chainable", () => {
     assertEquals(rows[0][1].text, "B");
 });
 
-Deno.test("static InlineKeyboardWithJSON.json() creates button", () => {
-    const btn = InlineKeyboardWithJSON.json("Static", { s: true });
+Deno.test("static InlineKeyboard.json() creates button", () => {
+    const btn = InlineKeyboard.json("Static", { s: true });
     assertEquals(btn.text, "Static");
     assertEquals(btn.callback_data, '{"s":true}');
+});
+
+Deno.test("InlineKeyboardWithJSON is an alias for InlineKeyboard", () => {
+    assertEquals(InlineKeyboardWithJSON, InlineKeyboard);
 });
 
 // --- jsonQuery middleware tests ---

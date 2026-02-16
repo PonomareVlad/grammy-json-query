@@ -6,7 +6,7 @@ data, and provides middleware to automatically parse callback query data as JSON
 
 ## Features
 
-- **InlineKeyboardWithJSON** — extends grammY's `InlineKeyboard` with a `.json()` method
+- **InlineKeyboard** — extends grammY's `InlineKeyboard` with a `.json()` method
   that encodes callback data as JSON.
 - **jsonQuery middleware** — hydrates `ctx.jsonQuery` with the parsed JSON from
   callback query data.
@@ -24,7 +24,7 @@ npm install grammy-json-query
 
 ```typescript
 import {
-    InlineKeyboardWithJSON,
+    InlineKeyboard,
     jsonQuery,
     type JsonQueryFlavor,
 } from "npm:grammy-json-query";
@@ -35,7 +35,7 @@ import {
 ```typescript
 import { Bot, Context } from "grammy";
 import {
-    InlineKeyboardWithJSON,
+    InlineKeyboard,
     jsonQuery,
     type JsonQueryFlavor,
 } from "grammy-json-query";
@@ -49,7 +49,7 @@ bot.use(jsonQuery());
 
 // Send an inline keyboard with JSON-encoded buttons
 bot.command("start", async (ctx) => {
-    const keyboard = new InlineKeyboardWithJSON()
+    const keyboard = new InlineKeyboard()
         .json("Like 👍", { action: "vote", value: "like" })
         .json("Dislike 👎", { action: "vote", value: "dislike" });
 
@@ -75,5 +75,5 @@ bot.start();
 You can also use the static `.json()` method to create a button in one step:
 
 ```typescript
-const button = InlineKeyboardWithJSON.json("Click me", { id: 42 });
+const button = InlineKeyboard.json("Click me", { id: 42 });
 ```
