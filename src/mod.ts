@@ -37,9 +37,15 @@ export class InlineKeyboardWithJSON extends InlineKeyboard {
         data: unknown = {},
     ): InlineKeyboardButton.CallbackButton {
         const encoded = JSON.stringify(data);
-        if (encoded.length > 64) {
+        if (typeof encoded !== "string") {
             throw new Error(
-                `Callback data exceeds 64 bytes: ${encoded.length}`,
+                "Callback data could not be serialized to JSON",
+            );
+        }
+        const byteLength = new TextEncoder().encode(encoded).byteLength;
+        if (byteLength > 64) {
+            throw new Error(
+                `Callback data exceeds 64 bytes: ${byteLength}`,
             );
         }
         return InlineKeyboard.text(text, encoded);
