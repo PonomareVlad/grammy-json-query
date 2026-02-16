@@ -75,5 +75,5 @@ bot.start();
 You can also use the static `.json()` method to create a button in one step:
 
 ```typescript
-const keyboard = InlineKeyboardWithJSON.json("Click me", { id: 42 });
+const button = InlineKeyboardWithJSON.json("Click me", { id: 42 });
 ```
