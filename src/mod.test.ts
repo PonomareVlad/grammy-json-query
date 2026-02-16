@@ -54,13 +54,10 @@ Deno.test("InlineKeyboardWithJSON.json() is chainable", () => {
     assertEquals(rows[0][1].text, "B");
 });
 
-Deno.test("static InlineKeyboardWithJSON.json() creates keyboard", () => {
-    const kb = InlineKeyboardWithJSON.json("Static", { s: true });
-    // deno-lint-ignore no-explicit-any
-    const rows = (kb as any).inline_keyboard;
-    assertEquals(rows.length, 1);
-    assertEquals(rows[0][0].text, "Static");
-    assertEquals(rows[0][0].callback_data, '{"s":true}');
+Deno.test("static InlineKeyboardWithJSON.json() creates button", () => {
+    const btn = InlineKeyboardWithJSON.json("Static", { s: true });
+    assertEquals(btn.text, "Static");
+    assertEquals(btn.callback_data, '{"s":true}');
 });
 
 // --- jsonQuery middleware tests ---

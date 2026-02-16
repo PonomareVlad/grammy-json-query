@@ -1,4 +1,5 @@
 import { Composer, Context, InlineKeyboard } from "./deps.deno.ts";
+import type { InlineKeyboardButton } from "./deps.deno.ts";
 
 /**
  * Flavor for context that adds the `jsonQuery` getter.
@@ -26,13 +27,22 @@ type JsonQueryContext = Context & JsonQueryFlavor;
  */
 export class InlineKeyboardWithJSON extends InlineKeyboard {
     /**
-     * Creates a new `InlineKeyboardWithJSON` with a single JSON button.
+     * Creates a new JSON-encoded callback button object.
      *
      * @param text Button label
      * @param data Data to be JSON-encoded as callback data
      */
-    static json(text: string, data: unknown = {}) {
-        return new InlineKeyboardWithJSON().json(text, data);
+    static json(
+        text: string,
+        data: unknown = {},
+    ): InlineKeyboardButton.CallbackButton {
+        const encoded = JSON.stringify(data);
+        if (encoded.length > 64) {
+            throw new Error(
+                `Callback data exceeds 64 bytes: ${encoded.length}`,
+            );
+        }
+        return InlineKeyboard.text(text, encoded);
     }
 
     /**
@@ -42,13 +52,7 @@ export class InlineKeyboardWithJSON extends InlineKeyboard {
      * @param data Data to be JSON-encoded as callback data
      */
     json(text: string, data: unknown = {}) {
-        const encoded = JSON.stringify(data);
-        if (encoded.length > 64) {
-            throw new Error(
-                `Callback data exceeds 64 bytes: ${encoded.length}`,
-            );
-        }
-        return this.text(text, encoded);
+        return this.add(InlineKeyboardWithJSON.json(text, data));
     }
 }
 
