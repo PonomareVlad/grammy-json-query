@@ -61,13 +61,6 @@ export class InlineKeyboard extends BaseInlineKeyboard {
         return this.add(InlineKeyboard.json(text, data));
     }
 }
-
-/**
- * Backward-compatible alias for `InlineKeyboard`.
- * @deprecated Use `InlineKeyboard` instead.
- */
-export const InlineKeyboardWithJSON = InlineKeyboard;
-
 /**
  * Creates middleware that parses callback query data as JSON and
  * exposes the result via `ctx.jsonQuery`.

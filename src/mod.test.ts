@@ -1,11 +1,6 @@
 import { assertEquals } from "@std/assert";
 import { Api, Context, type UserFromGetMe } from "./deps.deno.ts";
-import {
-    InlineKeyboard,
-    InlineKeyboardWithJSON,
-    jsonQuery,
-    type JsonQueryFlavor,
-} from "./mod.ts";
+import { InlineKeyboard, jsonQuery, type JsonQueryFlavor } from "./mod.ts";
 
 type TestContext = Context & JsonQueryFlavor;
 
@@ -59,10 +54,6 @@ Deno.test("static InlineKeyboard.json() creates button", () => {
     const btn = InlineKeyboard.json("Static", { s: true });
     assertEquals(btn.text, "Static");
     assertEquals(btn.callback_data, '{"s":true}');
-});
-
-Deno.test("InlineKeyboardWithJSON is an alias for InlineKeyboard", () => {
-    assertEquals(InlineKeyboardWithJSON, InlineKeyboard);
 });
 
 // --- jsonQuery middleware tests ---
