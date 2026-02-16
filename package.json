@@ -1,6 +1,6 @@
 {
     "name": "grammy-json-query",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "description": "JSON Callback Query Plugin for grammY",
     "homepage": "https://github.com/PonomareVlad/grammy-json-query",
     "main": "./out/mod.js",
